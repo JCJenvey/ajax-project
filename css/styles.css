@@ -17,6 +17,13 @@ button {
   font-family: Eczar, serif;
 }
 
+input {
+  font-family: Eczar, serif;
+  background-color: #fff;
+  width: 100%;
+  outline: none;
+}
+
 .navbar {
   display: flex;
   flex-wrap: nowrap;
@@ -27,7 +34,6 @@ button {
 .logo,
 .search-type {
   color: #fff;
-  padding-right: 15px;
 }
 
 .logo {
@@ -41,9 +47,27 @@ button {
   text-decoration: underline;
 }
 
+.logo,
+.second-nav-item {
+  padding-right: 13px;
+}
+
+.searchbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.random-card {
+  color: #428dfd;
+  text-decoration: underline;
+  margin-top: 25px;
+}
+
 @media screen and (min-width: 768px) {
   .logo,
-  .search-type {
+  .second-nav-item {
     padding-right: 100px;
   }
 }
@@ -59,7 +83,7 @@ button {
   }
 
   .logo,
-  .search-type {
+  .second-nav-item {
     padding-right: 275px;
   }
 }
