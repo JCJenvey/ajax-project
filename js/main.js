@@ -2,7 +2,7 @@ const $searchBar = document.querySelector('.search-bar');
 const $loading = document.querySelector('.loading');
 const $view = document.getElementsByClassName('view');
 const $logo = document.querySelector('.logo');
-// const $cardImg = document.querySelector('.card-img');
+const $cardImg = document.querySelector('.card-img');
 const $cardHeader = document.querySelector('.card-header');
 const $cmc = document.querySelector('.cmc');
 const $type = document.querySelector('.type');
@@ -23,6 +23,13 @@ $searchBar.addEventListener('keyup', e => {
         $searchBar.value = '';
         const result = xhr.response;
         $loading.classList.add('hidden');
+
+        if (result.cards[result.cards.length - 1].imageUrl) {
+          $cardImg.setAttribute('src', result.cards[result.cards.length - 1].imageUrl);
+          $cardImg.setAttribute('onerror', 'src=\'images / card - back.jpg\';');
+        } else {
+          $cardImg.setAttribute('src', 'images/card-back.jpg');
+        }
 
         $cardHeader.textContent = result.cards[result.cards.length - 1].name;
 
