@@ -22,10 +22,49 @@
   </header>
   <main>
     <div class="container">
-      <div class="row">
-        <div class="column-full searchbar">
-          <input placeholder="Emrakul, the Promised End" type="search" name="search">
-          <button class="random-card">Find a random card</button>
+      <div data-view="name-search" class="view">
+        <div class="row">
+          <div class="column-full searchbar-container">
+            <input placeholder="Emrakul, the Promised End" type="search" name="search" class="search-bar">
+            <button class="random-card">Find a random card</button>
+            <h1 class="loading hidden">Loading...</h1>
+          </div>
+        </div>
+      </div>
+      <div data-view="card-info" class="view hidden">
+        <div class="row">
+          <div class="column-full card-info-container">
+            <div class="column-half card-info-column img-col">
+              <img src="images/card-back.jpg" alt="The back of a magic card" class="card-img">
+            </div>
+            <div class="column-half card-info-column">
+              <div class="card-text">
+                <p class="card-info-styling card-header border-bottom">
+                  Name
+                  <span></span>
+                  <img src="images/mana-symbols/0.png" alt="mana cost" class="mana-symbol">
+                </p>
+                <p class="card-info-styling border-bottom cmc">
+                  Converted Mana Cost: 0
+                </p>
+                <p class="card-info-styling border-bottom type">
+                  Type
+                </p>
+                <p class="card-info-styling border-bottom description hidden">
+                  Effects
+                </p>
+                <p class="card-info-styling border-bottom power-toughness hidden">
+                  0/0
+                </p>
+                <p class="card-info-styling border-bottom loyalty hidden">
+                  0
+                </p>
+                <p class="card-info-styling sets">
+                  All Sets:
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

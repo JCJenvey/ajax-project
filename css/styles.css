@@ -24,6 +24,10 @@ input {
   outline: none;
 }
 
+p {
+  margin: 0;
+}
+
 .navbar {
   display: flex;
   flex-wrap: nowrap;
@@ -52,7 +56,7 @@ input {
   padding-right: 13px;
 }
 
-.searchbar {
+.searchbar-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,10 +69,72 @@ input {
   margin-top: 25px;
 }
 
+.card-info-container {
+  background-color: #d9d9d9;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 1.5rem 0;
+  margin: 20px 0;
+}
+
+.card-info-column {
+  display: flex;
+  justify-content: center;
+}
+
+.card-img {
+  width: 70%;
+  padding-bottom: 1.5rem;
+}
+
+.card-text {
+  width: 100%;
+}
+
+.img-col {
+  align-items: center;
+}
+
+.card-info-styling {
+  font-size: 16px;
+  padding: 5px 10px;
+  background-color: #fff;
+  padding-left: 10px;
+}
+
+.mana-symbol {
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+}
+
+.border-bottom {
+  border-bottom: #000 solid 1px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.search-bar::placeholder {
+  color: #a7b4bf;
+}
+
+span::before {
+  display: inline-block;
+  width: 15px;
+  content: " ";
+}
+
 @media screen and (min-width: 768px) {
   .logo,
   .second-nav-item {
     padding-right: 100px;
+  }
+
+  .card-img {
+    padding-bottom: 0;
   }
 }
 

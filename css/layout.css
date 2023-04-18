@@ -14,12 +14,9 @@
   width: 100%;
 }
 
-.column-full {
+.column-full,
+.column-half {
   width: 100%;
-}
-
-button:hover {
-  cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {
@@ -27,7 +24,12 @@ button:hover {
     max-width: 900px;
   }
 
-  .column-full {
+  .column-full,
+  .column-half {
     padding: 0 0.75rem;
+  }
+
+  .column-half {
+    width: 50%;
   }
 }
