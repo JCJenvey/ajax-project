@@ -11,6 +11,8 @@ const $powerToughness = document.querySelector('.power-toughness');
 const $loyalty = document.querySelector('.loyalty');
 const $sets = document.querySelector('.sets');
 
+// let cardList = [];
+
 // Event Listeners Below
 $searchBar.addEventListener('keyup', e => {
   if (e.key === 'Enter') {
@@ -19,6 +21,7 @@ $searchBar.addEventListener('keyup', e => {
       xhr.open('GET', 'https://api.magicthegathering.io/v1/cards?name=' + $searchBar.value);
       xhr.responseType = 'json';
       xhr.addEventListener('load', () => {
+        // cardList = [];
         const $span = document.createElement('span');
         $searchBar.value = '';
         const result = xhr.response;

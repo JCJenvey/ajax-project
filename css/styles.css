@@ -28,6 +28,13 @@ p {
   margin: 0;
 }
 
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 10px 0;
+  text-align: center;
+}
+
 .navbar {
   display: flex;
   flex-wrap: nowrap;
@@ -69,13 +76,23 @@ p {
   margin-top: 25px;
 }
 
-.card-info-container {
+.card-info-container,
+.card-results-container {
   background-color: #d9d9d9;
   display: flex;
-  flex-wrap: wrap;
   width: 100%;
+}
+
+.card-info-container {
   padding: 1.5rem 0;
+  flex-wrap: wrap;
   margin: 20px 0;
+}
+
+.card-results-container {
+  margin-bottom: 20px;
+  font-size: 16px;
+  padding: 0;
 }
 
 .card-info-column {
@@ -113,6 +130,41 @@ p {
   border-bottom: #000 solid 1px;
 }
 
+.result {
+  color: #fff;
+  text-align: center;
+  margin: 15px 0;
+  font-size: 16px;
+}
+
+.set-result-col,
+.name-result-col,
+.type-result-col {
+  padding: 10px 0;
+}
+
+.set-result-col,
+.type-result-col {
+  display: none;
+}
+
+.set-result-col {
+  border-right: #000 solid 1px;
+}
+
+.type-result-col {
+  border-left: #000 solid 1px;
+}
+
+.result-header {
+  text-align: center;
+  border-bottom: solid #000 1px;
+}
+
+.view-result {
+  font-size: 16px;
+}
+
 button:hover {
   cursor: pointer;
 }
@@ -135,6 +187,11 @@ span::before {
 
   .card-img {
     padding-bottom: 0;
+  }
+
+  .set-result-col,
+  .type-result-col {
+    display: block;
   }
 }
 
