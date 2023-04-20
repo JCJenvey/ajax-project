@@ -1,5 +1,6 @@
 const $searchBar = document.querySelector('.search-bar');
 const $loading = document.querySelector('.loading');
+const $error = document.querySelector('.error');
 const $view = document.getElementsByClassName('view');
 const $logo = document.querySelector('.logo');
 const $cardImg = document.querySelector('.card-img');
@@ -10,8 +11,15 @@ const $description = document.querySelector('.description');
 const $powerToughness = document.querySelector('.power-toughness');
 const $loyalty = document.querySelector('.loyalty');
 const $sets = document.querySelector('.sets');
+const $result = document.querySelector('.result');
+const $setResultCol = document.querySelector('.set-result-col');
+const $nameResultCol = document.querySelector('.name-result-col');
+const $typeResultCol = document.querySelector('.type-result-col');
+let $resultListSet = document.querySelector('.result-list-set');
+let $resultListName = document.querySelector('.result-list-name');
+let $resultListType = document.querySelector('.result-list-type');
 
-// let cardList = [];
+let cardList = [];
 
 // Event Listeners Below
 $searchBar.addEventListener('keyup', e => {
@@ -21,80 +29,93 @@ $searchBar.addEventListener('keyup', e => {
       xhr.open('GET', 'https://api.magicthegathering.io/v1/cards?name=' + $searchBar.value);
       xhr.responseType = 'json';
       xhr.addEventListener('load', () => {
-        // cardList = [];
-        const $span = document.createElement('span');
-        $searchBar.value = '';
-        const result = xhr.response;
-        $loading.classList.add('hidden');
-
-        if (result.cards[result.cards.length - 1].imageUrl) {
-          $cardImg.setAttribute('src', result.cards[result.cards.length - 1].imageUrl);
-          $cardImg.setAttribute('onerror', 'src=\'images / card - back.jpg\';');
+        if (xhr.status >= 400) {
+          $error.classList.remove('hidden');
+          setTimeout(() => {
+            $error.classList.add('hidden');
+          }, 5000);
         } else {
-          $cardImg.setAttribute('src', 'images/card-back.jpg');
-        }
+          cardList = [];
+          const result = xhr.response;
 
-        $cardHeader.textContent = result.cards[result.cards.length - 1].name;
+          for (let i = 0; i < result.cards.length; i++) {
+            let cardNotInList = true;
+            if (cardList.length === 0) {
+              if (result.cards[i].set.length === 3) {
+                cardList.push(result.cards[i]);
+              }
+            } else {
+              for (let j = 0; j < cardList.length; j++) {
+                if (cardList[j].name === result.cards[i].name) {
+                  cardNotInList = false;
+                }
+              }
+              if (cardNotInList && result.cards[i].set.length === 3) {
+                cardList.push(result.cards[i]);
+              }
+            }
+          }
 
-        if (result.cards[result.cards.length - 1].manaCost) {
-          let cost = result.cards[result.cards.length - 1].manaCost.replaceAll('{', '');
-          cost = cost.replaceAll('/', '');
-          cost = cost.replaceAll('}', ' ').trim();
-          const mana = cost.split(' ');
-          $cardHeader.append($span);
-          for (let i = 0; i < mana.length; i++) {
-            const $manaSymbol = document.createElement('img');
-            $manaSymbol.setAttribute('class', 'mana-symbol');
-            $manaSymbol.setAttribute('src', 'images/mana-symbols/' + mana[i] + '.png');
-            $manaSymbol.setAttribute('alt', 'mana cost');
-            $cardHeader.append($manaSymbol);
+          $loading.classList.add('hidden');
+
+          if (cardList.length === 1) {
+            renderCardInfo(cardList[0]);
+            viewSwap('card-info');
+            $searchBar.value = '';
+          } else {
+            $resultListSet.remove();
+            $resultListName.remove();
+            $resultListType.remove();
+            $result.textContent = 'Results for: "' + $searchBar.value + '"';
+
+            $resultListSet = document.createElement('ul');
+            $resultListSet.className = 'result-list-set';
+
+            $resultListName = document.createElement('ul');
+            $resultListName.className = 'result-list-name';
+
+            $resultListType = document.createElement('ul');
+            $resultListType.className = 'result-list-type';
+
+            if (cardList.length === 0) {
+              $setResultCol.append($resultListSet);
+              $nameResultCol.append($resultListName);
+              $typeResultCol.append($resultListType);
+            } else {
+              for (let i = 0; i < cardList.length; i++) {
+                const $setLi = document.createElement('li');
+                $setLi.textContent = cardList[i].set;
+
+                const $typeLi = document.createElement('li');
+                for (let j = 0; j < cardList[i].types.length; j++) {
+                  $typeLi.textContent += cardList[i].types[j];
+                  if (j + 1 !== cardList[i].types.length) {
+                    $typeLi.textContent += ' ';
+                  }
+                }
+
+                const $nameLi = document.createElement('li');
+                $nameLi.setAttribute('data-result-id', i);
+
+                const $button = document.createElement('button');
+                $button.className = 'view-result';
+                $button.textContent = cardList[i].name;
+
+                $nameLi.append($button);
+
+                $resultListSet.append($setLi);
+                $resultListName.append($nameLi);
+                $resultListType.append($typeLi);
+
+                $setResultCol.append($resultListSet);
+                $nameResultCol.append($resultListName);
+                $typeResultCol.append($resultListType);
+              }
+            }
+            viewSwap('many-results');
+            $searchBar.value = '';
           }
         }
-
-        $cmc.textContent = 'Converted Mana Cost: ' + result.cards[result.cards.length - 1].cmc;
-        $type.textContent = result.cards[result.cards.length - 1].type;
-
-        if (result.cards[result.cards.length - 1].text) {
-          $description.className = 'card-info-styling border-bottom description';
-          $description.textContent = result.cards[result.cards.length - 1].text;
-        } else {
-          $description.className = 'card-info-styling border-bottom description hidden';
-        }
-
-        if (result.cards[result.cards.length - 1].types.includes('Creature')) {
-          $powerToughness.className = 'card-info-styling border-bottom power-toughness';
-          $powerToughness.textContent = result.cards[result.cards.length - 1].power +
-            '/' + result.cards[result.cards.length - 1].toughness;
-        } else {
-          $powerToughness.className = 'card-info-styling border-bottom power-toughness hidden';
-        }
-
-        if (result.cards[result.cards.length - 1].types.includes('Planeswalker')) {
-          $loyalty.className = 'card-info-styling border-bottom loyalty';
-          $loyalty.textContent = 'Loyalty: ' + result.cards[result.cards.length - 1].loyalty;
-        } else {
-          $loyalty.className = 'card-info-styling border-bottom loyalty hidden';
-        }
-
-        $sets.textContent = 'All Sets: ';
-        const sets = result.cards[result.cards.length - 1].printings;
-        for (let i = 0; i < sets.length; i++) {
-          if (sets[i].length > 3) {
-            sets.splice(i, 1);
-            i--;
-          }
-        }
-        for (let i = 0; i < sets.length; i++) {
-          const $anchor = document.createElement('a');
-          $anchor.setAttribute('href', '#');
-          $anchor.textContent = sets[i];
-          $sets.append($anchor);
-          if (i + 1 !== sets.length) {
-            $sets.append(', ');
-          }
-        }
-
-        viewSwap('card-info');
       });
       xhr.send();
       $loading.classList.remove('hidden');
@@ -114,6 +135,76 @@ function viewSwap(view) {
       $view[i].className = 'view';
     } else {
       $view[i].className = 'view hidden';
+    }
+  }
+}
+
+function renderCardInfo(card) {
+  const $span = document.createElement('span');
+  if (card.imageUrl) {
+    $cardImg.setAttribute('src', card.imageUrl);
+    $cardImg.setAttribute('onerror', 'src=\'images / card - back.jpg\';');
+  } else {
+    $cardImg.setAttribute('src', 'images/card-back.jpg');
+  }
+
+  $cardHeader.textContent = card.name;
+
+  if (card.manaCost) {
+    let cost = card.manaCost.replaceAll('{', '');
+    cost = cost.replaceAll('/', '');
+    cost = cost.replaceAll('}', ' ').trim();
+    const mana = cost.split(' ');
+    $cardHeader.append($span);
+    for (let i = 0; i < mana.length; i++) {
+      const $manaSymbol = document.createElement('img');
+      $manaSymbol.setAttribute('class', 'mana-symbol');
+      $manaSymbol.setAttribute('src', 'images/mana-symbols/' + mana[i] + '.png');
+      $manaSymbol.setAttribute('alt', 'mana symbol');
+      $cardHeader.append($manaSymbol);
+    }
+  }
+
+  $cmc.textContent = 'Converted Mana Cost: ' + card.cmc;
+  $type.textContent = card.type;
+
+  if (card.text) {
+    $description.className = 'card-info-styling border-bottom description';
+    $description.textContent = card.text;
+  } else {
+    $description.className = 'card-info-styling border-bottom description hidden';
+  }
+
+  if (card.types.includes('Creature')) {
+    $powerToughness.className = 'card-info-styling border-bottom power-toughness';
+    $powerToughness.textContent = card.power +
+      '/' + card.toughness;
+  } else {
+    $powerToughness.className = 'card-info-styling border-bottom power-toughness hidden';
+  }
+
+  if (card.types.includes('Planeswalker')) {
+    $loyalty.className = 'card-info-styling border-bottom loyalty';
+    $loyalty.textContent = 'Loyalty: ' + card.loyalty;
+  } else {
+    $loyalty.className = 'card-info-styling border-bottom loyalty hidden';
+  }
+
+  $sets.textContent = 'All Sets: ';
+  const sets = card.printings;
+  for (let i = 0; i < sets.length; i++) {
+    if (sets[i].length > 3) {
+      sets.splice(i, 1);
+      i--;
+    }
+  }
+  for (let i = 0; i < sets.length; i++) {
+    const $anchor = document.createElement('a');
+    $anchor.setAttribute('href', '#');
+    $anchor.textContent = sets[i];
+    $sets.append($anchor);
+    if (i + 1 !== sets.length) {
+      $sets.append(', ');
     }
   }
 }

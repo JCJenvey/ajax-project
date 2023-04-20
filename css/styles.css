@@ -76,6 +76,10 @@ ul {
   margin-top: 25px;
 }
 
+.error {
+  text-align: center;
+}
+
 .card-info-container,
 .card-results-container {
   background-color: #d9d9d9;
@@ -163,6 +167,11 @@ ul {
 
 .view-result {
   font-size: 16px;
+}
+
+.result-list-set > li,
+.result-list-type > li {
+  padding: 1px 0;
 }
 
 button:hover {

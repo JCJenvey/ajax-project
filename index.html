@@ -22,12 +22,13 @@
   </header>
   <main>
     <div class="container">
-      <div data-view="name-search" class="view hidden">
+      <div data-view="name-search" class="view">
         <div class="row">
           <div class="column-full searchbar-container">
             <input placeholder="Emrakul, the Promised End" type="search" name="search" class="search-bar">
             <button class="random-card">Find a random card</button>
             <h1 class="loading hidden">Loading...</h1>
+            <h1 class="error hidden">An Error Has Occured. Please Refresh The Page And Try Again.</h1>
           </div>
         </div>
       </div>
@@ -67,7 +68,7 @@
           </div>
         </div>
       </div>
-      <div data-view="many-results" class="view">
+      <div data-view="many-results" class="view hidden">
         <div class="row">
           <div class="column-full">
             <p class="result">Results for:</p>
