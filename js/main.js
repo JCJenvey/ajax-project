@@ -31,6 +31,7 @@ $searchBar.addEventListener('keyup', e => {
       xhr.addEventListener('load', () => {
         if (xhr.status >= 400) {
           $error.classList.remove('hidden');
+          $loading.classList.add('hidden');
           setTimeout(() => {
             $error.classList.add('hidden');
           }, 5000);
@@ -125,6 +126,14 @@ $searchBar.addEventListener('keyup', e => {
 
 $logo.addEventListener('click', () => {
   viewSwap('name-search');
+});
+
+$nameResultCol.addEventListener('click', e => {
+  if (e.target && e.target.tagName === 'BUTTON') {
+    const $dataResultId = e.target.closest('[data-result-id]');
+    renderCardInfo(cardList[parseInt($dataResultId.getAttribute('data-result-id'), 10)]);
+    viewSwap('card-info');
+  }
 });
 
 // Function Declarations Below
